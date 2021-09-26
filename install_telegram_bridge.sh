@@ -21,6 +21,10 @@ createuser --pwprompt telegram_user
 createdb --encoding=UTF8 --locale=C --template=template0 --owner=telegram_user telegram
 exit # from postgres user
 
+# systemd
+sudo adduser --system mautrix-telegram --home /opt/mautrix-telegram
+
+
 # bridge setup
 # python config_bridge.py --name matrix.domain.com -p postgress_pass -i <api_id> --hash <api_hash>
 
