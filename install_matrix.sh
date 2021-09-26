@@ -12,6 +12,16 @@
 
 # don't forget to add swap
 
+
+# Inputs:
+echo "*** Please enter postgres password:"
+stty -echo
+read sql_password
+stty echo
+# name the server
+echo "*** Please enter server name:"
+read server_name
+
 # Add pgp keys
 sudo update
 sudo apt install lsb-release wget apt-transport-https
@@ -25,10 +35,6 @@ sudo upgrade
 # matrix
 sudo apt install matrix-synapse-py3 postgresql
 sudo -i -u postgres
-echo "*** Please enter postgres password:"
-stty -echo
-read sql_password
-stty echo
 psql -c "CREATE USER \"synapseuser\" WITH PASSWORD '$sql_password';"
 psql -c "CREATE DATABASE synapse ENCODING 'UTF8' LC_COLLATE='C' LC_CTYPE='C' template=template0 OWNER \"synapseuser\";"
 exit # from postgres user
@@ -36,16 +42,21 @@ exit # from postgres user
 # more postgres
 sudo apt install python3-psycopg2
 
+#config manipulation
+CFG_FILE=/etc/matrix-synapse/homeserver.yaml
+
 # secret
 SECRET=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1`
-sudo ./uncomment.pl /etc/matrix-synapse/homeserver.yaml registration_shared_secret
-sudo ./change_field.pl /etc/matrix-synapse/homeserver.yaml "registration_shared_secret:" $SECRET
-sudo ./delete_region.pl /etc/matrix-synapse/homeserver.yaml database:
-sudo sh -c "cat synapse-postgres.config >> /etc/matrix-synapse/homeserver.yaml"
-sudo ./change_field.pl /etc/matrix-synapse/homeserver.yaml "   password" $sql_password
+sudo ./uncomment.pl $CFG_FILE registration_shared_secret
+sudo ./change_field.pl $CFG_FILE "registration_shared_secret:" $SECRET
+sudo ./delete_region.pl $CFG_FILE database:
+sudo sh -c "cat synapse-postgres.config >> $CFG_FILE"
+sudo ./change_field.pl $CFG_FILE "   password" $sql_password
 
 # nginx
 sudo apt install nginx
+sudo cp nginx_matrix.conf /etc/nginx/sites-available/matrix
+sudo ./change_field.pl /etc/nginx/sites-available/matrix SERVER_NAME $server_name\;
 sudo ln -s /etc/nginx/sites-available/matrix /etc/nginx/sites-enabled/
 sudo nginx -t # test server
 sudo systemctl restart nginx
@@ -57,13 +68,16 @@ sudo snap install --classic certbot
 sudo ln -s /snap/bin/certbot /usr/bin/certbot
 sudo ln -s /etc/letsencrypt/live/matrix.regev.tk/fullchain.pem /etc/matrix-synapse/matrixinformaticar.crt
 sudo ln -s /etc/letsencrypt/live/matrix.regev.tk/privkey.pem /etc/matrix-synapse/matrixinformaticar.key
-sudo ./uncomment.pl /etc/matrix-synapse/homeserver.yaml tls_certificate_path
-sudo ./change_field.pl /etc/matrix-synapse/homeserver.yaml tls_certificate_path: "/etc/letsencrypt/live/matrix.regev.tk/fullchain.pem"
-sudo ./uncomment.pl /etc/matrix-synapse/homeserver.yaml tls_private_key_path
-sudo ./change_field.pl /etc/matrix-synapse/homeserver.yaml tls_private_key_path: "/etc/letsencrypt/live/matrix.regev.tk/privkey.pem"
+sudo ./uncomment.pl $CFG_FILE tls_certificate_path
+sudo ./change_field.pl $CFG_FILE tls_certificate_path: "/etc/letsencrypt/live/matrix.regev.tk/fullchain.pem"
+sudo ./uncomment.pl $CFG_FILE tls_private_key_path
+sudo ./change_field.pl $CFG_FILE tls_private_key_path: "/etc/letsencrypt/live/matrix.regev.tk/privkey.pem"
 
 # matrix custome configs
-sudo ./uncomment.pl /etc/matrix-synapse/homeserver.yaml allow_public_rooms_over_federation
+sudo ./change_value.pl $CFG_FILE "server_name: \"SERVERNAME\"" "server_name: $server_name"
+sudo ./uncomment.pl $CFG_FILE allow_public_rooms_over_federation
+sudo ./uncomment.pl $CFG_FILE enable_registration
+
 
 # init matrix
 sudo systemctl enable matrix-synapse
