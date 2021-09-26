@@ -22,6 +22,8 @@ stty echo
 echo "*** Please enter server name:"
 read server_name
 
+CFG_FILE=/etc/matrix-synapse/homeserver.yaml
+
 # Add pgp keys
 sudo update
 sudo apt install lsb-release wget apt-transport-https
@@ -33,17 +35,16 @@ sudo update
 sudo upgrade
 
 # matrix
-sudo apt install matrix-synapse-py3 postgresql
+sudo apt install matrix-synapse-py3 postgresql python3-psycopg2
 sudo -i -u postgres
-psql -c "CREATE USER \"synapseuser\" WITH PASSWORD '$sql_password';"
-psql -c "CREATE DATABASE synapse ENCODING 'UTF8' LC_COLLATE='C' LC_CTYPE='C' template=template0 OWNER \"synapseuser\";"
+#psql -c "CREATE USER \"synapse_user\" WITH PASSWORD '$sql_password';"
+#psql -c "CREATE DATABASE synapse ENCODING 'UTF8' LC_COLLATE='C' LC_CTYPE='C' template=template0 OWNER \"synapse_user\";"
+# this will prompt for a password for the new user
+createuser --pwprompt synapse_user
+# create db
+createdb --encoding=UTF8 --locale=C --template=template0 --owner=synapse_user synapse
 exit # from postgres user
 
-# more postgres
-sudo apt install python3-psycopg2
-
-#config manipulation
-CFG_FILE=/etc/matrix-synapse/homeserver.yaml
 
 # secret
 SECRET=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1`
@@ -77,7 +78,7 @@ sudo ./change_field.pl $CFG_FILE tls_private_key_path: "/etc/letsencrypt/live/ma
 sudo ./change_value.pl $CFG_FILE "server_name: \"SERVERNAME\"" "server_name: $server_name"
 sudo ./uncomment.pl $CFG_FILE allow_public_rooms_over_federation
 sudo ./uncomment.pl $CFG_FILE enable_registration
-
+sudo ./uncomment.pl $CFG_FILE suppress_key_server_warning
 
 # init matrix
 sudo systemctl enable matrix-synapse
