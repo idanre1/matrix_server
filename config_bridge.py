@@ -29,7 +29,7 @@ doc[args.bridge]['api_hash']=args.hash
 # bridge
 perm={}
 perm['*']='relaybot'
-perm['@idanre1:%s' % args.bridge]='puppeting'
+perm['@idanre1:%s' % args.name]='puppeting'
 doc['bridge']['permissions']=perm
 
 with open(filename, "w") as f:
