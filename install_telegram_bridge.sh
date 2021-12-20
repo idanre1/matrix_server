@@ -13,11 +13,10 @@ sudo systemctl daemon-reload
 # clone
 sudo adduser --system mautrix-telegram --home /opt/mautrix-telegram
 cd /opt/mautrix-telegram
-virtualenv -p /usr/bin/python3 .
-source ./bin/activate
-pip install --upgrade mautrix-telegram[all]
+sudo -u mautrix-telegram virtualenv -p /usr/bin/python3 .
+sudo -u mautrix-telegram /opt/mautrix-telegram/bin/pip install --upgrade mautrix-telegram[all]
 
-# config
+# config db
 sudo -i -u postgres
 createuser --pwprompt telegram_user
 createdb --encoding=UTF8 --locale=C --template=template0 --owner=telegram_user telegram
@@ -25,6 +24,9 @@ exit # from postgres user
 
 # bridge setup
 # python config_bridge.py --name matrix.domain.com -p postgress_pass -i <api_id> --hash <api_hash>
+# source /opt/mautrix-telegram/bin/activate
+# alembic -x config=/opt/mautrix-telegram/config.yaml upgrade head
+# deactivate
 
 # fold
 # python add_bridge_to_server.py -n /opt/mautrix-telegram/registration.yaml > tmp.yaml
