@@ -5,6 +5,7 @@ aptyes='sudo DEBIAN_FRONTEND=noninteractive apt-get -y '
 $aptyes update
 $aptyes upgrade
 $aptyes dist-upgrade
+$aptyes autoremove
 sudo systemctl stop mautrix-telegram
 
 echo "*** mautrix-telegram upgrade"
