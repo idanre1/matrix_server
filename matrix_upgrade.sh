@@ -2,9 +2,13 @@
 
 echo "*** apt upgrade"
 aptyes='sudo DEBIAN_FRONTEND=noninteractive apt-get -y '
+forces='-o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" --force-yes' # https://serverfault.com/questions/259226/automatically-keep-current-version-of-config-files-when-apt-get-install
+
 $aptyes update
-$aptyes upgrade
-$aptyes dist-upgrade
+$aptyes upgrade $forces
+$aptyes dist-upgrade $forces
+
+
 $aptyes autoremove
 sudo systemctl stop mautrix-telegram
 
