@@ -1,6 +1,7 @@
 #pip install pyyaml
 import yaml
 import argparse
+from random import randint
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-n", "--name", help="server_name")
@@ -19,6 +20,8 @@ with open(filename) as f:
 # configs:
 doc['homeserver']['address']=f'https://{args.name}'
 doc['homeserver']['domain']=args.name
+doc['appservice']['hostname']='0.0.0.0'
+doc['appservice']['port']=randint(23000, 29990)
 
 # database
 doc['appservice']['database']=f'postgres://{args.bridge}_user:{args.password}@127.0.0.1/{args.bridge}'
