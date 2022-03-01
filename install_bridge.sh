@@ -37,9 +37,10 @@ sudo systemctl daemon-reload
 
 # clone
 sudo adduser --system mautrix-${BRIDGE_NAME} --home /opt/mautrix-${BRIDGE_NAME}
-cd /opt/mautrix-${BRIDGE_NAME}
+pushd /opt/mautrix-${BRIDGE_NAME}
 sudo -u mautrix-${BRIDGE_NAME} virtualenv -p /usr/bin/python3 .
 sudo -u mautrix-${BRIDGE_NAME} /opt/mautrix-${BRIDGE_NAME}/bin/pip install --upgrade mautrix-${BRIDGE_NAME}[all]
+popd
 
 # config db
 sudo -u postgres createuser ${BRIDGE_NAME}_user
