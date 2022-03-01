@@ -59,6 +59,7 @@ fi
 pushd /opt/mautrix-${BRIDGE_NAME}
 sudo -u mautrix-${BRIDGE_NAME} /opt/mautrix-${BRIDGE_NAME}/bin/python -m mautrix_${BRIDGE_NAME} -g
 popd
+sudo chgrp $USER /opt/mautrix-twitter/registration.yaml
 
 # add bridge to matrix
 python3 add_bridge_to_server.py -n /opt/mautrix-${BRIDGE_NAME}/registration.yaml > tmp.yaml
