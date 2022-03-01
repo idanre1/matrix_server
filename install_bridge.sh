@@ -57,7 +57,7 @@ fi
 
 # bridge registration
 pushd /opt/mautrix-${BRIDGE_NAME}
-sudo -u mautrix-${BRIDGE_NAME} /opt/mautrix-${BRIDGE_NAME}/bin/python -m mautrix_facebook -g
+sudo -u mautrix-${BRIDGE_NAME} /opt/mautrix-${BRIDGE_NAME}/bin/python -m mautrix_${BRIDGE_NAME} -g
 popd
 
 # add bridge to matrix
