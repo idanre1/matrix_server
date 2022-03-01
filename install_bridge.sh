@@ -47,9 +47,9 @@ sudo -u postgres createdb --encoding=UTF8 --locale=C --template=template0 --owne
 
 # bridge setup
 if [[ $PARAMS_N -eq 3 ]]; then
-    python config_bridge.py --name $DOMAIN -p $BRIDGE_PASS
+    /opt/mautrix-${BRIDGE_NAME}/bin/python config_bridge.py --name $DOMAIN -p $BRIDGE_PASS
 else
-    python config_bridge.py --name $DOMAIN -p $BRIDGE_PASS -i $API_ID --hash $API_HASH
+    /opt/mautrix-${BRIDGE_NAME}/bin/python config_bridge.py --name $DOMAIN -p $BRIDGE_PASS -i $API_ID --hash $API_HASH
 fi
 
 # fold
