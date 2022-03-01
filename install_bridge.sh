@@ -44,6 +44,7 @@ sudo -u mautrix-${BRIDGE_NAME} /opt/mautrix-${BRIDGE_NAME}/bin/pip install --upg
 # config db
 sudo -u postgres createuser ${BRIDGE_NAME}_user
 sudo -u postgres createdb --encoding=UTF8 --locale=C --template=template0 --owner=${BRIDGE_NAME}_user ${BRIDGE_NAME}
+sudo -u postgres psql -c "ALTER USER ${BRIDGE_NAME}_user PASSWORD '$BRIDGE_PASS';"
 
 # bridge setup
 sudo -u mautrix-${BRIDGE_NAME} cp /opt/mautrix-${BRIDGE_NAME}/example-config.yaml /opt/mautrix-${BRIDGE_NAME}/config.yaml
