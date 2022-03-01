@@ -33,10 +33,15 @@ if args.hash != '':
 else:
     print('No api_hash, ignoring...')
 
-# bridge
 perm={}
-perm['*']='relaybot'
-perm['@idanre1:%s' % args.name]='puppeting'
+if args.id != '':
+	# API bridge
+	perm['*']='relaybot'
+	perm['@idanre1:%s' % args.name]='puppeting'
+else:
+	# password based bridge
+	perm['*']='relay'
+	perm['@idanre1:%s' % args.name]='admin'
 doc['bridge']['permissions']=perm
 
 with open(filename, "w") as f:
