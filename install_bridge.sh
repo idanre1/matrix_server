@@ -47,9 +47,9 @@ sudo -u postgres createdb --encoding=UTF8 --locale=C --template=template0 --owne
 
 # bridge setup
 if [[ $PARAMS_N -eq 3 ]]; then
-    python3 config_bridge.py --name $DOMAIN -p $BRIDGE_PASS
+    python3 config_bridge.py --bridge ${BRIDGE_NAME} --name $DOMAIN -p $BRIDGE_PASS
 else
-    python3 config_bridge.py --name $DOMAIN -p $BRIDGE_PASS -i $API_ID --hash $API_HASH
+    python3 config_bridge.py --bridge ${BRIDGE_NAME} --name $DOMAIN -p $BRIDGE_PASS -i $API_ID --hash $API_HASH
 fi
 
 # fold
