@@ -11,7 +11,8 @@ parser.add_argument("--bridge", help="Bridge name", default='telegram', action='
 args = parser.parse_args()
 
 
-filename = f'/nas/bridge_{args.bridge}/config.yaml'
+#legacy filename = f'/nas/bridge_{args.bridge}/config.yaml'
+filename = f'/nas/mautrix-{args.bridge}/config.yaml'
 with open(filename) as f:
      doc = yaml.safe_load(f)
 
