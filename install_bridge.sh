@@ -46,7 +46,7 @@ sudo -u postgres createuser ${BRIDGE_NAME}_user
 sudo -u postgres createdb --encoding=UTF8 --locale=C --template=template0 --owner=${BRIDGE_NAME}_user ${BRIDGE_NAME}
 
 # bridge setup
-cp /opt/mautrix-${BRIDGE_NAME}/example-config.yaml /opt/mautrix-${BRIDGE_NAME}/config.yaml
+sudo -u mautrix-${BRIDGE_NAME} cp /opt/mautrix-${BRIDGE_NAME}/example-config.yaml /opt/mautrix-${BRIDGE_NAME}/config.yaml
 if [[ $PARAMS_N -eq 3 ]]; then
     python3 config_bridge.py --bridge ${BRIDGE_NAME} --name $DOMAIN -p $BRIDGE_PASS
 else
