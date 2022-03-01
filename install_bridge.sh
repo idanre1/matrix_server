@@ -46,7 +46,7 @@ sudo -u postgres createuser ${BRIDGE_NAME}_user
 sudo -u postgres createdb --encoding=UTF8 --locale=C --template=template0 --owner=${BRIDGE_NAME}_user ${BRIDGE_NAME}
 
 # bridge setup
-if [ "$PARAMS_N" -e 3 ]; then
+if [[ $PARAMS_N -eq 3 ]]; then
     python config_bridge.py --name $DOMAIN -p $BRIDGE_PASS
 else
     python config_bridge.py --name $DOMAIN -p $BRIDGE_PASS -i $API_ID --hash $API_HASH
