@@ -1,12 +1,12 @@
 [Unit]
-Description=mautrix-telegram bridge
+Description=mautrix-facebook bridge
 
 [Service]
 # N.B. If you didn't create a user with the correct home directory, set this
 #      to the directory where config.yaml is (e.g. /opt/mautrix-telegram).
 WorkingDirectory=~
-ExecStart=/opt/mautrix-telegram/bin/python -m mautrix_telegram
-User=mautrix-telegram
+ExecStart=/opt/mautrix-facebook/bin/python -m mautrix_facebook
+User=mautrix-facebook
 
 [Install]
 WantedBy=multi-user.target
