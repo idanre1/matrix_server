@@ -12,7 +12,7 @@ args = parser.parse_args()
 
 
 #legacy filename = f'/nas/bridge_{args.bridge}/config.yaml'
-filename = f'/nas/mautrix-{args.bridge}/config.yaml'
+filename = f'/opt/mautrix-{args.bridge}/config.yaml'
 with open(filename) as f:
      doc = yaml.safe_load(f)
 
