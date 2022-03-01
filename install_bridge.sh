@@ -1,4 +1,4 @@
-#!/usr/bin/sh
+#!/bin/bash
 # Bridge installation instructions:
 # ./install_bridge.sh <bridge_name> <posgres_pass> <domain> [api_id] [api_hash]
 #
@@ -12,16 +12,16 @@ BRIDGE_NAME=$1
 BRIDGE_PASS=$2
 DOMAIN=$3
 PARAMS_N=3
-if [ "$#" -e 3 ]; then
+if [[ $# -eq 3 ]]; then
     echo "*** Non-API parameters supplied"
-elif [ "$#" -e 5 ]; then
+elif [[ $# -eq 5 ]]; then
     echo "*** API parameters supplied"
     PARAMS_N=5
     API_ID=$4
     API_HASH=$5
 else
     echo "*** Error: Not applicable command line arguments"
-    exit(1)
+    exit 1
 fi
 
 # Dependencies
@@ -43,8 +43,7 @@ sudo -u mautrix-${BRIDGE_NAME} /opt/mautrix-${BRIDGE_NAME}/bin/pip install --upg
 
 # config db
 sudo -u postgres createuser ${BRIDGE_NAME}_user
-createdb --encoding=UTF8 --locale=C --template=template0 --owner=${BRIDGE_NAME}_user ${BRIDGE_NAME}
-exit # from postgres user
+sudo -u postgres createdb --encoding=UTF8 --locale=C --template=template0 --owner=${BRIDGE_NAME}_user ${BRIDGE_NAME}
 
 # bridge setup
 if [ "$PARAMS_N" -e 3 ]; then
