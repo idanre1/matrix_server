@@ -53,7 +53,14 @@ else
     sudo -u mautrix-${BRIDGE_NAME} python3 config_bridge.py --bridge ${BRIDGE_NAME} --name $DOMAIN -p $BRIDGE_PASS -i $API_ID --hash $API_HASH
 fi
 
-# fold
-# python add_bridge_to_server.py -n /opt/mautrix-${BRIDGE_NAME}/registration.yaml > tmp.yaml
-# sudo mv tmp.yaml $CFG_FILE
-# sudo systemctl enable mautrix-${BRIDGE_NAME}.service
+# bridge registration
+pushd /opt/mautrix-${BRIDGE_NAME}
+sudo -u mautrix-${BRIDGE_NAME} /opt/mautrix-${BRIDGE_NAME}/bin/python -m mautrix_facebook -g
+popd
+
+# add bridge to matrix
+python3 add_bridge_to_server.py -n /opt/mautrix-${BRIDGE_NAME}/registration.yaml > tmp.yaml
+sudo mv tmp.yaml $CFG_FILE
+sudo systemctl restart matrix-synapse
+sudo systemctl enable mautrix-${BRIDGE_NAME}.service
+sudo systemctl start mautrix-${BRIDGE_NAME}.service
