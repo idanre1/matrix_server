@@ -18,10 +18,12 @@ with open(filename) as f:
      doc = yaml.safe_load(f)
 
 # configs:
+r=rand_port
 doc['homeserver']['address']=f'https://{args.name}'
 doc['homeserver']['domain']=args.name
+doc['appservice']['address']=f'http://localhost:{rand_port}'
 doc['appservice']['hostname']='0.0.0.0'
-doc['appservice']['port']=randint(23000, 29990)
+doc['appservice']['port']=rand_port
 
 # database
 doc['appservice']['database']=f'postgres://{args.bridge}_user:{args.password}@127.0.0.1/{args.bridge}'
