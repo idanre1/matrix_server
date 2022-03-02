@@ -21,7 +21,7 @@ with open(filename) as f:
      doc = yaml.safe_load(f)
 
 # configs:
-r=rand_port
+rand_port=randint(23634,29984)
 doc['homeserver']['address']=f'https://{args.name}'
 doc['homeserver']['domain']=args.name
 doc['appservice']['address']=f'http://localhost:{rand_port}'
