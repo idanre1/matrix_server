@@ -9,11 +9,14 @@ parser.add_argument("-p", "--password", help="postgres password")
 parser.add_argument("-i", "--id", default='', action='store', help="telegram app id, leave blank to ignore")
 parser.add_argument("--hash",     default='', action='store', help="telegram app hash, leave blank to ignore")
 parser.add_argument("--bridge", help="Bridge name", default='telegram', action='store')
+parser.add_argument("--filename",     default='', action='store', help="patching non-default filename")
 args = parser.parse_args()
 
-
-#legacy filename = f'/nas/bridge_{args.bridge}/config.yaml'
-filename = f'/opt/mautrix-{args.bridge}/config.yaml'
+# Find config filename
+if args.id != '':
+	filename=args.filename
+else:
+	filename = f'/opt/mautrix-{args.bridge}/config.yaml'
 with open(filename) as f:
      doc = yaml.safe_load(f)
 
