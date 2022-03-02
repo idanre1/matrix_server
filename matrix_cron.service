@@ -1,0 +1,7 @@
+[Unit]
+Description=Cron jobs for midnight
+#After=network.target multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/nas/matrix_server/run_matrix_cron.sh

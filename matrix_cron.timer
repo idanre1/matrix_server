@@ -1,0 +1,17 @@
+[Unit]
+Description=Cron jobs for midnight
+
+[Timer]
+# Time to wait after booting before we run first time
+OnBootSec=3600
+# Start first time only after specific time
+# daily
+OnCalendar=*-*-* 03:00:00
+# Time between running each consecutive time
+OnUnitActiveSec=24hr
+# starts once immediately if it missed the last start time
+#Persistent=true
+
+[Install]
+WantedBy=multi-user.target
+
