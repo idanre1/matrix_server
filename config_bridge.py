@@ -13,7 +13,7 @@ parser.add_argument("--filename",     default='', action='store', help="patching
 args = parser.parse_args()
 
 # Find config filename
-if args.id != '':
+if args.filename != '':
 	filename=args.filename
 else:
 	filename = f'/opt/mautrix-{args.bridge}/config.yaml'
