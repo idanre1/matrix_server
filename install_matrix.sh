@@ -80,8 +80,14 @@ sudo ./uncomment.pl $CFG_FILE allow_public_rooms_over_federation
 sudo ./uncomment.pl $CFG_FILE enable_registration
 sudo ./uncomment.pl $CFG_FILE suppress_key_server_warning
 
+# Set cron
+sudo cp matrix_cron.service /etc/systemd/system/matrix_cron.service
+sudo cp matrix_cron.timer /etc/systemd/system/matrix_cron.timer
+sudo systemctl daemon-reload
+sudo systemctl enable matrix_cron.timer
+sudo systemctl start matrix_cron.timer
+
 # init matrix
 sudo systemctl enable matrix-synapse
 sudo systemctl start matrix-synapse
 sudo systemctl status matrix-synapse
-
