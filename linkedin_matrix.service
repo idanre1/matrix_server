@@ -1,0 +1,12 @@
+[Unit]
+Description=linkedin_matrix bridge
+
+[Service]
+# N.B. If you didn't create a user with the correct home directory, set this
+#      to the directory where config.yaml is (e.g. /opt/linkedin_matrix).
+WorkingDirectory=~
+ExecStart=/opt/linkedin_matrix/bin/python -m linkedin_matrix
+User=linkedin_matrix
+
+[Install]
+WantedBy=multi-user.target
