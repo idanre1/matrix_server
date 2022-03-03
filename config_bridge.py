@@ -45,7 +45,7 @@ perm={}
 if args.id != '':
 	# API bridge
 	perm['*']='relaybot'
-	perm['@idanre1:%s' % args.name]='puppeting'
+	perm['@idanre1:%s' % args.name]='admin'
 else:
 	# password based bridge
 	perm['*']='relay'

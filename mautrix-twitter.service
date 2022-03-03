@@ -7,6 +7,8 @@ Description=mautrix-twitter bridge
 WorkingDirectory=~
 ExecStart=/opt/mautrix-twitter/bin/python -m mautrix_twitter
 User=mautrix-twitter
+SyslogFacility=local4
+SyslogIdentifier=mautrix-twitter
 
 [Install]
 WantedBy=multi-user.target
