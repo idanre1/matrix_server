@@ -7,6 +7,8 @@ Description=mautrix-facebook bridge
 WorkingDirectory=~
 ExecStart=/opt/mautrix-facebook/bin/python -m mautrix_facebook
 User=mautrix-facebook
+SyslogFacility=local4
+SyslogIdentifier=mautrix-facebook
 
 [Install]
 WantedBy=multi-user.target

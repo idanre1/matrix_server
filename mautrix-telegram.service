@@ -7,6 +7,8 @@ Description=mautrix-telegram bridge
 WorkingDirectory=~
 ExecStart=/opt/mautrix-telegram/bin/python -m mautrix_telegram
 User=mautrix-telegram
+SyslogFacility=local4
+SyslogIdentifier=mautrix-telegram
 
 [Install]
 WantedBy=multi-user.target

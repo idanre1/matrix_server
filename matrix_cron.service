@@ -5,3 +5,5 @@ Description=Cron jobs for midnight
 [Service]
 Type=simple
 ExecStart=/nas/matrix_server/run_matrix_cron.sh
+SyslogFacility=local4
+SyslogIdentifier=matrix-cron
