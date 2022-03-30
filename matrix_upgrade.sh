@@ -1,28 +1,39 @@
-#!/bin/sh
+#!/bin/bash
+
+BOTS=`cat matrix_upgrade.list`
+
+echo "*** matrix-synapse stop"
+sudo systemctl stop matrix-synapse
 
 echo "*** apt upgrade"
 aptyes='sudo DEBIAN_FRONTEND=noninteractive apt-get -y '
-forces='-o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" --force-yes' # https://serverfault.com/questions/259226/automatically-keep-current-version-of-config-files-when-apt-get-install
+forces='-o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" ' # https://serverfault.com/questions/259226/automatically-keep-current-version-of-config-files-when-apt-get-install
 
-$aptyes update
-$aptyes upgrade $forces
-$aptyes dist-upgrade $forces
+#$aptyes update
+#sudo dpkg --configure -a
+#$aptyes upgrade $forces
+#$aptyes dist-upgrade $forces
+#$aptyes autoremove
 
+for bot in $BOTS; do
+	sudo systemctl stop $bot
 
-$aptyes autoremove
-sudo systemctl stop mautrix-telegram
-
-echo "*** mautrix-telegram upgrade"
-cd /opt/mautrix-telegram
-source bin/activate
-sudo -u mautrix-telegram bin/pip install --upgrade mautrix-telegram[all]
-#alembic -x config=/opt/mautrix-telegram/config.yaml upgrade head
+	echo "*** $bot upgrade"
+	cd /opt/$bot
+	source bin/activate
+	sudo -u $bot bin/pip install --upgrade $bot[all]
+	#alembic -x config=/opt/mautrix-telegram/config.yaml upgrade head
+	deactivate
+done
 
 echo "*** matrix-synapse restart"
-sudo systemctl restart matrix-synapse
+sudo systemctl start matrix-synapse
 echo "*** matrix-synapse restart...(sleep)"
 sleep 5
 
-echo "*** mautrix-telegram restart"
-sudo systemctl start mautrix-telegram
+for bot in $BOTS; do
+	echo "*** $bot restart"
+	sudo systemctl start $bot
+	sleep 2
+done
 
