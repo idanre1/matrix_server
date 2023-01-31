@@ -1,9 +1,8 @@
 #!/bin/bash
 
-BOTS=`cat matrix_upgrade.list`
+BOTS=`cat matrix_bots.list`
 
-echo "*** matrix-synapse stop"
-sudo systemctl stop matrix-synapse
+matrix_shutdown.sh
 
 echo "*** apt upgrade"
 aptyes='sudo DEBIAN_FRONTEND=noninteractive apt-get -y '
@@ -16,8 +15,6 @@ forces='-o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold
 #$aptyes autoremove
 
 for bot in $BOTS; do
-	sudo systemctl stop $bot
-
 	echo "*** $bot upgrade"
 	cd /opt/$bot
 	source bin/activate
@@ -26,14 +23,4 @@ for bot in $BOTS; do
 	deactivate
 done
 
-echo "*** matrix-synapse restart"
-sudo systemctl start matrix-synapse
-echo "*** matrix-synapse restart...(sleep)"
-sleep 5
-
-for bot in $BOTS; do
-	echo "*** $bot restart"
-	sudo systemctl start $bot
-	sleep 2
-done
-
+matrix_powerup.sh
