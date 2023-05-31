@@ -29,3 +29,7 @@ sudo pg_upgradecluster 12 main
 sudo pg_dropcluster 12 main
 ```
 Turn on matrix
+
+# bridge venv upgrade notes
+pyvenv.cfg:  
+home = /opt/mautrix-facebook/bin
