@@ -16,9 +16,10 @@ forces='-o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold
 
 for bot in $BOTS; do
 	echo "*** $bot upgrade"
-	cd /opt/$bot
-	source bin/activate
-	sudo -u $bot bin/pip install --upgrade $bot[all]
+	cd /opt/$bot/bin
+	source activate
+	sudo -u $bot pip3 install --upgrade pip
+	sudo -u $bot pip3 install --upgrade $bot[all]
 	#alembic -x config=/opt/mautrix-telegram/config.yaml upgrade head
 	deactivate
 done
