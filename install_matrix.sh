@@ -30,19 +30,22 @@ stty -echo
 read duckdns_email
 stty echo
 
-CFG_FILE=/etc/matrix-synapse/homeserver.yaml
-
-# Add pgp keys
-sudo update
-sudo apt install lsb-release wget apt-transport-https
-sudo wget -O /usr/share/keyrings/matrix-org-archive-keyring.gpg https://packages.matrix.org/debian/matrix-org-archive-keyring.gpg
-sudo echo "deb [signed-by=/usr/share/keyrings/matrix-org-archive-keyring.gpg] https://packages.matrix.org/debian/ $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/matrix-org.list
+CFG_FILE=/nas/homeserver.yaml
 
 # refresh system
 sudo apt update
 sudo apt upgrade
 
-# matrix
+#/nas/scripts/install_docker.sh
+#sudo usermod -aG docker $USER
+#
+## matrix
+#docker run -it --rm \
+#    --mount type=volume,src=synapse-data,dst=/data \
+#    -e SYNAPSE_SERVER_NAME=$server_name \
+#    -e SYNAPSE_REPORT_STATS=no \
+#    matrixdotorg/synapse:latest generate
+
 sudo apt install matrix-synapse-py3 postgresql python3-psycopg2
 sudo -i -u postgres
 #psql -c "CREATE USER \"synapse_user\" WITH PASSWORD '$sql_password';"
