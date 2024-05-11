@@ -10,8 +10,11 @@
 # from * to 8448/tcp for Matrix federation
 # from * to 3478/tcp, 5349/tcp, 3478/udp, 5349/udp, 49152-49172/udp for TURN/STUN
 
-# don't forget to add swap
-
+# don't forget to:
+# 1. add swap
+# 2. create duckdns.ini from duckdns_.ini
+# 3. create run_duckdns.sh from run_duckdns_.sh
+# 3.1 execute run_duckdns.sh
 
 # Inputs:
 echo "*** Please enter postgres password:"
@@ -21,6 +24,11 @@ stty echo
 # name the server
 echo "*** Please enter server name:"
 read server_name
+# Certbot creds
+echo "*** Please enter duckdns email:"
+stty -echo
+read duckdns_email
+stty echo
 
 CFG_FILE=/etc/matrix-synapse/homeserver.yaml
 
@@ -66,13 +74,26 @@ sudo systemctl enable nginx
 # TLS
 sudo snap install core; sudo snap refresh core
 sudo snap install --classic certbot
+sudo snap install certbot-dns-duckdns
+sudo snap set certbot trust-plugin-with-root=ok
+sudo snap connect certbot:plugin certbot-dns-duckdns
+sudo certbot certonly \
+  --non-interactive \
+  --agree-tos \
+  --email $duckdns_email \
+  --preferred-challenges dns \
+  --authenticator dns-duckdns \
+  --dns-duckdns-credentials duckdns.ini \
+  --dns-duckdns-propagation-seconds 60 \
+  -d "$server_name"
+
 sudo ln -s /snap/bin/certbot /usr/bin/certbot
-sudo ln -s /etc/letsencrypt/live/matrix.regev.tk/fullchain.pem /etc/matrix-synapse/matrixinformaticar.crt
-sudo ln -s /etc/letsencrypt/live/matrix.regev.tk/privkey.pem /etc/matrix-synapse/matrixinformaticar.key
+sudo ln -s /etc/letsencrypt/live/${server_name}/fullchain.pem /etc/matrix-synapse/matrixinformaticar.crt
+sudo ln -s /etc/letsencrypt/live/${server_name}/privkey.pem /etc/matrix-synapse/matrixinformaticar.key
 sudo ./uncomment.pl $CFG_FILE tls_certificate_path
-sudo ./change_field.pl $CFG_FILE tls_certificate_path: "/etc/letsencrypt/live/matrix.regev.tk/fullchain.pem"
+sudo ./change_field.pl $CFG_FILE tls_certificate_path: "/etc/letsencrypt/live/${server_name}/fullchain.pem"
 sudo ./uncomment.pl $CFG_FILE tls_private_key_path
-sudo ./change_field.pl $CFG_FILE tls_private_key_path: "/etc/letsencrypt/live/matrix.regev.tk/privkey.pem"
+sudo ./change_field.pl $CFG_FILE tls_private_key_path: "/etc/letsencrypt/live/${server_name}/privkey.pem"
 
 # matrix custome configs
 sudo ./change_value.pl $CFG_FILE "server_name: \"SERVERNAME\"" "server_name: $server_name"

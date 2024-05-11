@@ -1,2 +1,4 @@
 log/
 matrix_bots.list
+duckdns.ini
+run_duckdns.sh

@@ -7,6 +7,11 @@ echo "*** matrix_server cron started"
 # ----------------------------------------
 # Main
 # ----------------------------------------
+# duckdns
+echo "*** DuckDns - start"
+/nas/matrix_server/run_duckdns.sh
+echo "*** DuckDns - end"
+
 # certbot
 echo "*** certbot - start"
 /usr/bin/certbot renew --quiet
