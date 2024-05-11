@@ -35,12 +35,12 @@ CFG_FILE=/etc/matrix-synapse/homeserver.yaml
 # Add pgp keys
 sudo update
 sudo apt install lsb-release wget apt-transport-https
-sudo wget -qO /usr/share/keyrings/matrix-org-archive-keyring.gpg https://packages.matrix.org/debian/matrix-org-archive-keyring.gpg
+sudo wget -O /usr/share/keyrings/matrix-org-archive-keyring.gpg https://packages.matrix.org/debian/matrix-org-archive-keyring.gpg
 sudo echo "deb [signed-by=/usr/share/keyrings/matrix-org-archive-keyring.gpg] https://packages.matrix.org/debian/ $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/matrix-org.list
 
 # refresh system
-sudo update
-sudo upgrade
+sudo apt update
+sudo apt upgrade
 
 # matrix
 sudo apt install matrix-synapse-py3 postgresql python3-psycopg2
