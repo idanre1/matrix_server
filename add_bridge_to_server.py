@@ -19,6 +19,10 @@ try:
 except (KeyError, TypeError):
 	apps=[args.name]
 
-doc['app_service_config_files']=apps
+try:
+	doc['app_service_config_files']=apps
+except TypeError:
+	# yaml file was blank
+	doc = {'app_service_config_files':args.name}
 
 yaml.dump(doc,sys.stdout)
