@@ -1,0 +1,15 @@
+## Registration ##
+#
+# Registration can be rate-limited using the parameters in the "Ratelimiting"
+# section of this file.
+
+# Enable registration for new users.
+#
+enable_registration: false
+
+
+
+# Uncomment the following to disable the warning that is emitted when the
+# trusted_key_servers include 'matrix.org'. See above.
+#
+suppress_key_server_warning: true
