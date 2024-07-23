@@ -33,3 +33,7 @@ Turn on matrix
 # bridge venv upgrade notes
 pyvenv.cfg:  
 home = /opt/mautrix-facebook/bin
+
+# add a bot
+Use shell script per bridge docs
+add bot to bots list: `matrix_bots.list`
