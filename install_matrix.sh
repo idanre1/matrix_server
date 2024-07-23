@@ -39,7 +39,6 @@ sudo apt install -y lsb-release wget apt-transport-https
 sudo wget -O /usr/share/keyrings/matrix-org-archive-keyring.gpg https://packages.matrix.org/debian/matrix-org-archive-keyring.gpg
 echo "deb [signed-by=/usr/share/keyrings/matrix-org-archive-keyring.gpg] https://packages.matrix.org/debian/ $(lsb_release -cs) main prerelease" |
     sudo tee /etc/apt/sources.list.d/matrix-org.list
-sudo cp -f conf.d/*.yaml $CFG_PATH/
 
 # refresh system
 sudo apt update
@@ -48,6 +47,7 @@ sudo apt upgrade
 # install matrix
 echo "*** Installing postgres"
 sudo apt install matrix-synapse-py3 postgresql python3-psycopg2
+sudo cp -f conf.d/*.yaml $CFG_PATH/
 
 # postgres
 # create postgres user automatically with password
@@ -86,6 +86,9 @@ sudo snap install --classic certbot
 sudo snap install certbot-dns-duckdns
 sudo snap set certbot trust-plugin-with-root=ok
 sudo snap connect certbot:plugin certbot-dns-duckdns
+
+echo "*** Applying certbot"
+sudo ln -s /snap/bin/certbot /usr/bin/certbot
 sudo certbot certonly \
   --non-interactive \
   --agree-tos \
@@ -96,11 +99,9 @@ sudo certbot certonly \
   --dns-duckdns-propagation-seconds 60 \
   -d "$server_name"
 
-echo "*** Applying certbot"
-sudo ln -s /snap/bin/certbot /usr/bin/certbot
+echo "*** linking ceritifacte to server"
 sudo ln -s /etc/letsencrypt/live/${server_name}/fullchain.pem /etc/matrix-synapse/matrixinformaticar.crt
 sudo ln -s /etc/letsencrypt/live/${server_name}/privkey.pem /etc/matrix-synapse/matrixinformaticar.key
-
 fullchain="tls_certificate_path: \"/etc/letsencrypt/live/${server_name}/fullchain.pem\""
 privkey="tls_private_key_path: \"/etc/letsencrypt/live/${server_name}/privkey.pem\""
 sudo sh -c "echo $fullchain > $CFG_PATH/tls.yaml"
