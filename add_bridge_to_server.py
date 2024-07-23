@@ -8,7 +8,7 @@ parser.add_argument("-n", "--name", help="appended registration yaml")
 args = parser.parse_args()
 
 
-name = '/etc/matrix-synapse/homeserver.yaml'
+name = '/etc/matrix-synapse/conf.d/apps.yaml'
 filename = name
 with open(filename) as f:
      doc = yaml.safe_load(f)
