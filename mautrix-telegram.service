@@ -1,5 +1,6 @@
 [Unit]
 Description=mautrix-telegram bridge
+After=matrix-synapse.service
 
 [Service]
 # N.B. If you didn't create a user with the correct home directory, set this
