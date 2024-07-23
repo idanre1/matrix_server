@@ -1,11 +1,13 @@
 #!/bin/bash
 # Bridge installation instructions:
-# ./install_bridge.sh <bridge_name> <posgres_pass> <domain> [api_id] [api_hash]
+# ./install_mautrix_bridge.sh.sh <bridge_name> <posgres_pass> <server_name> [api_id] [api_hash]
 #
 # Telegram:
-# ./install_bridge.sh telegram <posgres_pass> <domain> <api_id> <api_hash>
+# ./install_mautrix_bridge.sh.sh telegram <posgres_pass> <server_name> <api_id> <api_hash>
 # Facebook:
-# ./install_bridge.sh facebook <posgres_pass> <domain>
+# ./install_mautrix_bridge.sh.sh facebook <posgres_pass> <server_name>
+# Twitter:
+# ./install_mautrix_bridge.sh.sh twitter <posgres_pass> <server_name>
 
 # Inits
 BRIDGE_NAME=$1

@@ -16,7 +16,7 @@ with open(filename) as f:
 try:
 	apps=doc['app_service_config_files']
 	apps.append(args.name)
-except KeyError:
+except KeyError, TypeError:
 	apps=[args.name]
 
 doc['app_service_config_files']=apps
