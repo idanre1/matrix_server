@@ -25,6 +25,7 @@ else
 fi
 
 # Dependencies
+echo "*** Installing venv"
 aptyes='sudo DEBIAN_FRONTEND=noninteractive apt-get -y '
 
 $aptyes install python3-virtualenv
@@ -36,18 +37,23 @@ sudo cp ${BRIDGE_NAME}_matrix.service /etc/systemd/system/${BRIDGE_NAME}_matrix.
 sudo systemctl daemon-reload
 
 # clone
+echo "*** add user"
 sudo adduser --system ${BRIDGE_NAME}_matrix --home /opt/${BRIDGE_NAME}_matrix
+
+echo "*** venv"
 pushd /opt/${BRIDGE_NAME}_matrix
 sudo -u ${BRIDGE_NAME}_matrix virtualenv -p /usr/bin/python3 .
 sudo -u ${BRIDGE_NAME}_matrix /opt/${BRIDGE_NAME}_matrix/bin/pip install --upgrade ${BRIDGE_NAME}_matrix
 popd
 
 # config db
+echo "*** postgres"
 sudo -u postgres createuser ${BRIDGE_NAME}_user
 sudo -u postgres createdb --encoding=UTF8 --locale=C --template=template0 --owner=${BRIDGE_NAME}_user ${BRIDGE_NAME}
 sudo -u postgres psql -c "ALTER USER ${BRIDGE_NAME}_user PASSWORD '$BRIDGE_PASS';"
 
 # bridge setup
+echo "*** bridge setup"
 sudo -u ${BRIDGE_NAME}_matrix cp /opt/${BRIDGE_NAME}_matrix/lib/python3.8/site-packages/${BRIDGE_NAME}_matrix/example-config.yaml /opt/${BRIDGE_NAME}_matrix/config.yaml
 if [[ $PARAMS_N -eq 3 ]]; then
     sudo -u ${BRIDGE_NAME}_matrix python3 config_bridge.py --bridge ${BRIDGE_NAME} --name $DOMAIN -p $BRIDGE_PASS --filename /opt/${BRIDGE_NAME}_matrix/config.yaml
@@ -56,12 +62,14 @@ else
 fi
 
 # bridge registration
+echo "*** bridge registration"
 pushd /opt/${BRIDGE_NAME}_matrix
 sudo -u ${BRIDGE_NAME}_matrix /opt/${BRIDGE_NAME}_matrix/bin/python -m ${BRIDGE_NAME}_matrix -g
 popd
 sudo chgrp $USER /opt/${BRIDGE_NAME}_matrix/registration.yaml
 
 # add bridge to matrix
+echo "*** add bridge to matrix"
 python3 add_bridge_to_server.py -n /opt/${BRIDGE_NAME}_matrix/registration.yaml > tmp.yaml
 sudo mv tmp.yaml $CFG_FILE
 sudo systemctl restart matrix-synapse
