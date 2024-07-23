@@ -32,7 +32,7 @@ aptyes='sudo DEBIAN_FRONTEND=noninteractive apt-get -y '
 $aptyes install python3-virtualenv
 $aptyes install python3-dev libolm-dev #build-essential libssl-dev libffi-dev
 
-CFG_FILE=/etc/matrix-synapse/homeserver.yaml
+CFG_FILE=/etc/matrix-synapse/conf.d/apps.yaml
 # same path executions
 sudo cp mautrix-$BRIDGE_NAME.service /etc/systemd/system/mautrix-${BRIDGE_NAME}.service
 sudo systemctl daemon-reload

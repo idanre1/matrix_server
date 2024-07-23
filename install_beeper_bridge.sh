@@ -30,7 +30,7 @@ aptyes='sudo DEBIAN_FRONTEND=noninteractive apt-get -y '
 $aptyes install python3-virtualenv
 $aptyes install python3-dev libolm-dev #build-essential libssl-dev libffi-dev
 
-CFG_FILE=/etc/matrix-synapse/homeserver.yaml
+CFG_FILE=/etc/matrix-synapse/conf.d/apps.yaml
 # same path executions
 sudo cp ${BRIDGE_NAME}_matrix.service /etc/systemd/system/${BRIDGE_NAME}_matrix.service
 sudo systemctl daemon-reload
