@@ -39,7 +39,7 @@ sudo apt install -y lsb-release wget apt-transport-https
 sudo wget -O /usr/share/keyrings/matrix-org-archive-keyring.gpg https://packages.matrix.org/debian/matrix-org-archive-keyring.gpg
 echo "deb [signed-by=/usr/share/keyrings/matrix-org-archive-keyring.gpg] https://packages.matrix.org/debian/ $(lsb_release -cs) main prerelease" |
     sudo tee /etc/apt/sources.list.d/matrix-org.list
-sudo cp -f conf.d/* $CFG_PATH/
+sudo cp -f conf.d/*.yaml $CFG_PATH/
 
 # refresh system
 sudo apt update
@@ -57,20 +57,21 @@ sudo -u postgres psql -c "CREATE USER \"synapse_user\" WITH PASSWORD '$sql_passw
 # create db
 sudo -u postgres createdb --encoding=UTF8 --locale=C --template=template0 --owner=synapse_user synapse
 # configure postgres
-sudo ./change_field.pl $CFG_PATH/postgres.yaml "   "password:"" $sql_password
+# spaceX3_password: <value>
+sudo ./change_field.pl $CFG_PATH/postgres.yaml "   password:" "$sql_password"
 
 
 # secret
 echo "*** Installing secret"
 SECRET=`cat /dev/urandom | tr -dc 'a-zA-Z0-9' | fold -w 32 | head -n 1`
-sudo ./uncomment.pl $CFG_FILE registration_shared_secret
-sudo ./change_field.pl $CFG_FILE "registration_shared_secret:" $SECRET
+sudo sh -c "echo registration_shared_secret: $SECRET > $CFG_PATH/macaroon_secret.yaml"
 
 # nginx
 echo "*** Installing nginx"
 sudo apt install nginx
 sudo cp nginx_matrix.conf /etc/nginx/sites-available/matrix
-sudo ./change_field.pl /etc/nginx/sites-available/matrix SERVER_NAME $server_name\;
+# spaceX4_server_name: <value>;
+sudo ./change_field.pl /etc/nginx/sites-available/matrix "    server_name" $server_name\;
 sudo ln -s /etc/nginx/sites-available/matrix /etc/nginx/sites-enabled/
 
 # Snap
