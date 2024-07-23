@@ -10,7 +10,7 @@ Also add binder/ashmem kernel modules to azure kernel (dynamically loaded) for a
 ## How to register new user
 ```bash
 cd /etc/matrix-synapse/
-register_new_matrix_user -c homeserver.yaml http://localhost:8008
+register_new_matrix_user -c conf.d/macaroon_secret.yaml http://localhost:8008
 ```
   Follow the cli instructions
 

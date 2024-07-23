@@ -1,11 +1,9 @@
 #!/bin/bash
 # Bridge installation instructions:
-# ./install_bridge.sh <bridge_name> <posgres_pass> <domain> [api_id] [api_hash]
+# ./install_beeper_bridge.sh <bridge_name> <posgres_pass> <server_name> [api_id] [api_hash]
 #
 # Telegram:
-# ./install_bridge.sh telegram <posgres_pass> <domain> <api_id> <api_hash>
-# Facebook:
-# ./install_bridge.sh facebook <posgres_pass> <domain>
+# ./install_beeper_bridge.sh linkedin <posgres_pass> <server_name>
 
 # Inits
 BRIDGE_NAME=$1
@@ -54,7 +52,8 @@ sudo -u postgres psql -c "ALTER USER ${BRIDGE_NAME}_user PASSWORD '$BRIDGE_PASS'
 
 # bridge setup
 echo "*** bridge setup"
-sudo -u ${BRIDGE_NAME}_matrix cp /opt/${BRIDGE_NAME}_matrix/lib/python3.8/site-packages/${BRIDGE_NAME}_matrix/example-config.yaml /opt/${BRIDGE_NAME}_matrix/config.yaml
+PYVER=`sudo \ls -1 /opt/${BRIDGE_NAME}_matrix/lib/ | grep "python" | head -1`
+sudo -u ${BRIDGE_NAME}_matrix cp /opt/${BRIDGE_NAME}_matrix/lib/$PYVER/site-packages/${BRIDGE_NAME}_matrix/example-config.yaml /opt/${BRIDGE_NAME}_matrix/config.yaml
 if [[ $PARAMS_N -eq 3 ]]; then
     sudo -u ${BRIDGE_NAME}_matrix python3 config_bridge.py --bridge ${BRIDGE_NAME} --name $DOMAIN -p $BRIDGE_PASS --filename /opt/${BRIDGE_NAME}_matrix/config.yaml
 else
