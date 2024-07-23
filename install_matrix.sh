@@ -31,6 +31,7 @@ read duckdns_email
 
 # location to matrix configs
 CFG_FILE=/etc/matrix-synapse/homeserver.yaml
+CFG_PATH=/etc/matrix-synapse/conf.d
 
 # add matrix packages
 echo "*** Installing matrix"
@@ -38,6 +39,7 @@ sudo apt install -y lsb-release wget apt-transport-https
 sudo wget -O /usr/share/keyrings/matrix-org-archive-keyring.gpg https://packages.matrix.org/debian/matrix-org-archive-keyring.gpg
 echo "deb [signed-by=/usr/share/keyrings/matrix-org-archive-keyring.gpg] https://packages.matrix.org/debian/ $(lsb_release -cs) main prerelease" |
     sudo tee /etc/apt/sources.list.d/matrix-org.list
+sudo cp -f conf.d/* $CFG_PATH/
 
 # refresh system
 sudo apt update
@@ -55,9 +57,7 @@ sudo -u postgres psql -c "CREATE USER \"synapse_user\" WITH PASSWORD '$sql_passw
 # create db
 sudo -u postgres createdb --encoding=UTF8 --locale=C --template=template0 --owner=synapse_user synapse
 # configure postgres
-sudo ./delete_region.pl $CFG_FILE database:
-sudo sh -c "cat synapse-postgres.config >> $CFG_FILE"
-sudo ./change_field.pl $CFG_FILE "   password" $sql_password
+sudo ./change_field.pl $CFG_PATH/postgres.yaml "   "password:"" $sql_password
 
 
 # secret
@@ -99,17 +99,11 @@ echo "*** Applying certbot"
 sudo ln -s /snap/bin/certbot /usr/bin/certbot
 sudo ln -s /etc/letsencrypt/live/${server_name}/fullchain.pem /etc/matrix-synapse/matrixinformaticar.crt
 sudo ln -s /etc/letsencrypt/live/${server_name}/privkey.pem /etc/matrix-synapse/matrixinformaticar.key
-sudo ./uncomment.pl $CFG_FILE tls_certificate_path
-sudo ./change_field.pl $CFG_FILE tls_certificate_path: "/etc/letsencrypt/live/${server_name}/fullchain.pem"
-sudo ./uncomment.pl $CFG_FILE tls_private_key_path
-sudo ./change_field.pl $CFG_FILE tls_private_key_path: "/etc/letsencrypt/live/${server_name}/privkey.pem"
 
-# matrix custome configs
-echo "*** Custom configs"
-sudo ./change_value.pl $CFG_FILE "server_name: \"SERVERNAME\"" "server_name: $server_name"
-sudo ./uncomment.pl $CFG_FILE allow_public_rooms_over_federation
-sudo ./uncomment.pl $CFG_FILE enable_registration
-sudo ./uncomment.pl $CFG_FILE suppress_key_server_warning
+fullchain="tls_certificate_path: \"/etc/letsencrypt/live/${server_name}/fullchain.pem\""
+privkey="tls_private_key_path: \"/etc/letsencrypt/live/${server_name}/privkey.pem\""
+sudo sh -c "echo $fullchain > $CFG_PATH/tls.yaml"
+sudo sh -c "echo $privkey >> $CFG_PATH/tls.yaml"
 
 # Set cron
 echo "*** Installing cron"
