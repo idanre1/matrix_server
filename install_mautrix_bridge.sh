@@ -77,3 +77,6 @@ sudo mv tmp.yaml $CFG_FILE
 sudo systemctl restart matrix-synapse
 sudo systemctl enable mautrix-${BRIDGE_NAME}.service
 sudo systemctl start mautrix-${BRIDGE_NAME}.service
+
+# bookkeeping
+sh -c "echo mautrix-${BRIDGE_NAME}.service > matrix_bots.list"
