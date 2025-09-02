@@ -14,7 +14,7 @@ echo "*** DuckDns - end"
 
 # certbot
 echo "*** certbot - start"
-/usr/bin/certbot renew --quiet
+/usr/bin/certbot renew
 echo "*** certbot - end"
 
 sleep 30
