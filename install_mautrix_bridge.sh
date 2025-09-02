@@ -79,4 +79,4 @@ sudo systemctl enable mautrix-${BRIDGE_NAME}.service
 sudo systemctl start mautrix-${BRIDGE_NAME}.service
 
 # bookkeeping
-sh -c "echo mautrix-${BRIDGE_NAME}.service > matrix_bots.list"
+sh -c "echo mautrix-${BRIDGE_NAME} > matrix_bots.list"

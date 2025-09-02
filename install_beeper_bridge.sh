@@ -76,4 +76,4 @@ sudo systemctl enable ${BRIDGE_NAME}_matrix.service
 sudo systemctl start ${BRIDGE_NAME}_matrix.service
 
 # bookkeeping
-sh -c "echo ${BRIDGE_NAME}_matrix.service > matrix_bots.list"
+sh -c "echo ${BRIDGE_NAME}_matrix > matrix_bots.list"

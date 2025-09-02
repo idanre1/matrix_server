@@ -7,6 +7,6 @@ sudo systemctl stop matrix-synapse
 
 for bot in $BOTS; do
 	echo "*** Stop bot: $bot"
-	sudo systemctl stop $bot
+	sudo systemctl stop ${bot}.service
 done
 

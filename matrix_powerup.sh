@@ -9,7 +9,7 @@ sleep 5
 
 for bot in $BOTS; do
 	echo "*** $bot start"
-	sudo systemctl start $bot
+	sudo systemctl start ${bot}.service
 	sleep 2
 done
 
